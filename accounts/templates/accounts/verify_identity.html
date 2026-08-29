@@ -1,10 +1,10 @@
-<!--  
+<!--
 Identity Verification page for the Mithaq platform.
 
 Guides users through the identity verification process by collecting and
 validating required personal documents, ensuring that all parties in a
 contract are authenticated within the digital contract management system.
-  -->
+-->
 {% extends 'core/dashboard_base.html' %}
 {% load static %}
 
@@ -46,106 +46,86 @@ contract are authenticated within the digital contract management system.
       </section>
     {% else %}
       <section class="verify-wrapper">
-        {# Face-verification feature is temporarily unavailable.
-           face-api.js was removed — this section will be re-enabled
-           once an alternative identity verification flow is implemented. #}
-        <div class="verified-card" style="border: 2px dashed #E5E7EB;">
-          <div class="verified-icon" style="background:#F3F4F6;">
-            <span style="color:#6B7280;">⏳</span>
-          </div>
-          <h2 style="color:#1C1C1C;">ميزة التحقق من الهوية قيد التطوير</h2>
-          <p style="color:#6B7280;">سيتم تفعيل التحقق من الهوية قريباً. يمكنك الاستمرار في استخدام المنصة في الوقت الحالي.</p>
-          <a href="{% url 'dashboard:dashboard' %}" class="verify-main-btn">العودة للوحة التحكم</a>
-        </div>
-
-        {# Hidden sections kept for when face-api is re-integrated #}
-        <div style="display:none;">
         <div class="verify-steps">
 
-        <div id="step1" class="verify-card">
-          <h2>الخطوة 1 — صورة الهوية الوطنية</h2>
-          <p>قم بتحميل صورة واضحة لهويتك الوطنية أو الإقامة</p>
+          <div id="step1" class="verify-card">
+            <h2>الخطوة 1 — صورة الهوية الوطنية</h2>
+            <p>قم بتحميل صورة واضحة لهويتك الوطنية أو الإقامة</p>
 
-          <label for="id-upload" class="upload-box">
-            <div class="upload-icon">⬆</div>
-            <strong>اضغط لاختيار صورة الهوية</strong>
-            <span>JPG, PNG — أقل من 5MB</span>
-            <input type="file" id="id-upload" accept="image/*" />
-          </label>
+            <label for="id-upload" class="upload-box">
+              <div class="upload-icon">⬆</div>
+              <strong>اضغط لاختيار صورة الهوية</strong>
+              <span>JPG, PNG — أقل من 5MB</span>
+              <input type="file" id="id-upload" accept="image/*" />
+            </label>
 
-          <div id="id-preview" class="preview-box hidden">
-            <img id="id-img" alt="صورة الهوية" />
-            <p>تم تحميل صورة الهوية</p>
-          </div>
-
-          <button id="step1-next" onclick="goToStep2()" disabled class="verify-main-btn full-btn">التالي — فتح الكاميرا</button>
-        </div>
-
-        <div id="step2" class="verify-card hidden">
-          <h2>الخطوة 2 — التقط صورة وجهك</h2>
-          <p>انظر مباشرة إلى الكاميرا وتأكد من إضاءة جيدة</p>
-
-          <div id="models-loading" class="loading-box">
-            <div class="spinner"></div>
-            <p>جارٍ تحميل نماذج الذكاء الاصطناعي...</p>
-          </div>
-
-          <div id="camera-container" class="camera-container hidden">
-            <div class="camera-box">
-              <video id="camera-video" autoplay muted playsinline></video>
-
-              <canvas id="face-canvas"></canvas>
-
-              <div class="face-guide"></div>
+            <div id="id-preview" class="preview-box hidden">
+              <img id="id-img" alt="صورة الهوية" />
+              <p>تم تحميل صورة الهوية</p>
             </div>
 
-            <div id="face-status" class="face-status">ابحث عن وجهك في الكاميرا...</div>
-
-            <button id="capture-btn" onclick="captureSelfie()" disabled class="verify-gold-btn full-btn">التقط الصورة</button>
+            <button id="step1-next" onclick="goToStep2()" disabled class="verify-main-btn full-btn">التالي — فتح الكاميرا</button>
           </div>
 
-          <div id="selfie-preview" class="preview-box hidden">
-            <img id="selfie-img" alt="صورة الوجه" />
-            <p>تم التقاط صورتك</p>
+          <div id="step2" class="verify-card hidden">
+            <h2>الخطوة 2 — التقط صورة وجهك</h2>
+            <p>انظر مباشرة إلى الكاميرا وتأكد من إضاءة جيدة</p>
 
-           <buttononclick="retakeSelfie()" class="verify-outline-btn full-btn" إعادة الالتقاط </buttononclick=>  
+            <div id="models-loading" class="loading-box">
+              <div class="spinner"></div>
+              <p>جارٍ تحميل نماذج الذكاء الاصطناعي...</p>
+            </div>
+
+            <div id="camera-container" class="camera-container hidden">
+              <div class="camera-box">
+                <video id="camera-video" autoplay muted playsinline></video>
+                <canvas id="face-canvas"></canvas>
+                <div class="face-guide"></div>
+              </div>
+
+              <div id="face-status" class="face-status">ابحث عن وجهك في الكاميرا...</div>
+
+              <button id="capture-btn" onclick="captureSelfie()" disabled class="verify-gold-btn full-btn">التقط الصورة</button>
+            </div>
+
+            <div id="selfie-preview" class="preview-box hidden">
+              <img id="selfie-img" alt="صورة الوجه" />
+              <p>تم التقاط صورتك</p>
+              <button onclick="retakeSelfie()" class="verify-outline-btn full-btn">إعادة الالتقاط</button>
+            </div>
+
+            <button id="compare-btn" onclick="compareFaces()" disabled class="verify-main-btn full-btn">مقارنة الوجوه والتحقق</button>
           </div>
 
-          <button id="compare-btn" onclick="compareFaces()" disabled class="verify-main-btn full-btn">مقارنة الوجوه والتحقق</button>
-        </div>
+          <div id="step3" class="verify-card result-card hidden">
+            <div id="comparing-loading">
+              <div class="spinner large"></div>
+              <h3>جارٍ مقارنة الوجوه...</h3>
+              <p>يرجى الانتظار</p>
+            </div>
 
-        <div id="step3" class="verify-card result-card hidden">
-          <div id="comparing-loading">
-            <div class="spinner large"></div>
-            <h3>جارٍ مقارنة الوجوه...</h3>
-            <p>يرجى الانتظار</p>
+            <div id="result-success" class="hidden">
+              <div class="result-icon success">✓</div>
+              <h2>تم التحقق من هويتك بنجاح!</h2>
+              <p>تطابق وجهك مع صورة الهوية. يمكنك الآن توقيع العقود.</p>
+              <a href="{% url 'dashboard:dashboard' %}" class="verify-main-btn">العودة للوحة التحكم</a>
+            </div>
+
+            <div id="result-failure" class="hidden">
+              <div class="result-icon danger">×</div>
+              <h2>لم يتم التعرف على وجهك</h2>
+              <p>لم يتطابق وجهك مع صورة الهوية. يرجى المحاولة مجددًا مع التأكد من إضاءة جيدة.</p>
+              <button onclick="resetVerification()" class="verify-gold-btn">حاول مجددًا</button>
+            </div>
           </div>
 
-          <div id="result-success" class="hidden">
-            <div class="result-icon success">✓</div>
-
-            <h2>تم التحقق من هويتك بنجاح!</h2>
-
-            <p>تطابق وجهك مع صورة الهوية. يمكنك الآن توقيع العقود.</p>
-
-            <a href="{% url 'dashboard:dashboard' %}" class="verify-main-btn">العودة للوحة التحكم</a>
-          </div>
-
-          <div id="result-failure" class="hidden">
-            <div class="result-icon danger">×</div>
-
-            <h2>لم يتم التعرف على وجهك</h2>
-
-            <p>لم يتطابق وجهك مع صورة الهوية. يرجى المحاولة مجددًا مع التأكد من إضاءة جيدة.</p>
-
-            <button onclick="resetVerification()" class="verify-gold-btn">حاول مجددًا</button>
-          </div>
         </div>
       </section>
-        </div>{# end hidden sections #}
     {% endif %}
   </main>
 {% endblock %}
 
-{# face-api.min.js and verify_identity.js removed — face-api.js was deleted.
-   Re-add scripts here when the identity verification feature is re-implemented. #}
+{% block extra_js %}
+  <script src="{% static 'js/face-api.min.js' %}"></script>
+  <script src="{% static 'js/verify_identity.js' %}"></script>
+{% endblock %}

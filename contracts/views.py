@@ -660,6 +660,13 @@ def contract_pdf_view(request: HttpRequest, pk):
     """
 
     # Convert to PDF
+    if WeasyHTML is None:
+        return HttpResponse(
+            'خدمة تصدير PDF غير متاحة حالياً — مكتبات النظام المطلوبة غير مثبتة.',
+            status=503,
+            content_type='text/plain; charset=utf-8',
+        )
+
     pdf = WeasyHTML(string=full_html, base_url=request.build_absolute_uri()).write_pdf()
 
     # Return PDF response
