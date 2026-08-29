@@ -169,6 +169,11 @@ def initiate_payment(user, plan: SubscriptionPlan, card_data: dict = None) -> di
             'Moyasar response | http_status=%s body=%.500s',
             response.status_code, response.text,
         )
+        if not response.ok:
+            logger.error(
+                'Moyasar rejected payment | http_status=%s body=%s',
+                response.status_code, response.text,
+            )
         response.raise_for_status()
         data = response.json()
 
