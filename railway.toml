@@ -4,21 +4,23 @@ startCommand = "python manage.py collectstatic --noinput && python manage.py mig
 
 [build]
 aptPackages = [
+  "libglib2.0-0",
   "libgobject-2.0-0",
   "libpango-1.0-0",
   "libpangoft2-1.0-0",
   "libpangocairo-1.0-0",
   "libgdk-pixbuf2.0-0",
   "libcairo2",
+  "libharfbuzz0b",
+  "libfontconfig1",
   "libffi-dev",
   "shared-mime-info",
   "fonts-noto-core",
   "fonts-noto-cjk"
 ]
-startCommand = "python manage.py migrate && python manage.py seed_plans && gunicorn Mithaq.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
 healthcheckPath = "/"
 healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"
 
 [deploy.variables]
-RAILPACK_DEPLOY_APT_PACKAGES = "libglib2.0-0 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 libfontconfig1 libharfbuzz0b"
+RAILPACK_DEPLOY_APT_PACKAGES = "libglib2.0-0 libgobject-2.0-0 libpango-1.0-0 libpangocairo-1.0-0 libpangoft2-1.0-0 libgdk-pixbuf2.0-0 libcairo2 libharfbuzz0b libfontconfig1 libffi-dev shared-mime-info fonts-noto-core fonts-noto-cjk"
