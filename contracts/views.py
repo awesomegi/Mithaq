@@ -25,7 +25,9 @@ from invitations.services import SigningInvitationService
 # installed yet. PDF export endpoints will return 503 until Railway installs them.
 try:
     from weasyprint import HTML as WeasyHTML
-except OSError:
+except (OSError, ImportError) as _wp_err:
+    import logging as _logging
+    _logging.getLogger(__name__).warning('WeasyPrint unavailable: %s', _wp_err)
     WeasyHTML = None
 from .models import Contract, ContractParty, ContractVersion, ContractInvitedParty
 
